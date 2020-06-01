@@ -37,7 +37,7 @@ public:
 		delete[] name;
 	}
 	virtual void show() = 0;  //Чистая виртуальная функция
-	virtual void input() = 0;
+	virtual void Add() = 0;
 
 protected:
 	char* name;
@@ -69,7 +69,7 @@ public:
 		cout << "\n Водительский стаж:" << experience;
 		cout << "\n";
 	}
-	void input()
+	void Add()
 	{
 		cout << "\n Имя водителя АВТОМОБИЛЯ: ";
 		cin >> name;
@@ -105,7 +105,7 @@ public:
 		cout << "\n Водительский стаж:" << experience;
 		cout << "\n";
 	}
-	void input()
+	void Add()
 	{
 		cout << "\n Имя водителя ПОЕЗДА: ";
 		cin >> name;
@@ -140,7 +140,7 @@ public:
 		cout << "\n Водительский стаж:" << experience;
 		cout << "\n";
 	}
-	void input()
+	void Add()
 	{
 		cout << "\n Имя водителя ЭКСПРЕСС: ";
 		cin >> name;
@@ -161,9 +161,9 @@ int main()
 	x1 = new car;
 	x2 = new train;
 	x3 = new express;
-	x1->input();
-	x2->input();
-	x3->input();
+	x1->Add();
+	x2->Add();
+	x3->Add();
 	cout << "_______________________________________________\n";
 	TranspVehicle::beg = x1;
 	x1->next = x2;
