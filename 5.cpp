@@ -1,78 +1,158 @@
-#include <iostream>
-#include <list>
-#include <vector>
-
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include<iostream>
+#include<Windows.h>
+#include<string>
 using namespace std;
-
-class MyClass {
-protected:
-	virtual void showInf() = 0;
-};
-
-class Result : public MyClass {
-protected:
+class TranspVehicle // базовый класс
+{
 public:
-	list<char> El = { 'd','e','v','e','l' };
-	void showInf() override {
-		cout << "list: ";
-		for (char n : El) {
-			cout << n << " ";
+	static TranspVehicle* beg; //указатель на начало списка
+	TranspVehicle* next = NULL;
+	static void ShowList() //список
+	{
+		TranspVehicle* p = beg;
+		while (p)
+		{
+			p->show();
+			p = p->next;
 		}
-		cout << endl;
 	}
-	char& operator [] (const int index);
-	list<char>& operator +(const list<char> second) {
-		auto iter2 = second.begin();
-		for (char n : second) {
-			El.emplace_back(*iter2);
-			++iter2;
-		}
-		return El;
+	
+	TranspVehicle(const char* NAME, int EXPERIENCE) //с парам
+	{
+		// выделение памяти для name. размер выделяемой памяти = длина строки NAME
+		name = new char[strlen(NAME) + 1];
+		strcpy(name, NAME);
+		experience = EXPERIENCE;
 	}
-	bool operator !=(const list<char> second) {
-		auto iter = El.begin();
-		auto iter2 = second.begin();
-		for (char n : second) {
-			if (*iter != *iter2) {
-				return false;
-			}
-		}
-		return true;
+	virtual ~TranspVehicle() // виртуальный деструктор
+	{
+		delete[] name;
 	}
-	int begin;
+	virtual void show() = 0; //Чистая виртуальная функция
+virtual void input() = 0; protected:
+	char* name;
+	int experience;
 };
-
-char& Result::operator[](const int index) {
-	auto iter = El.begin();
-	for (int i = 0; i < index; i++) {
-		iter++;
+TranspVehicle* TranspVehicle::beg = NULL; //Инициализация статической компоненты
+class car :public TranspVehicle // производный класс
+{
+public:
+	car() : TranspVehicle() {} //без парам
+	car(const char* STAMP, int EXPERIENCE, bool AddToList = false) :TranspVehicle(STAMP,
+		EXPERIENCE) //с парам
+	{
+		if (AddToList)
+		{
+			TranspVehicle* p = beg;
+			while (p->next)
+			{
+				p = p->next;
+			} p
+				->next = this;
+		}
 	}
-	return *iter;
-}
-
-
-int main() {
-	Result List;
-	Result result;
-	list<char> second = { 'o','p','e','r' };
-	list<char> me = { 'd','e','v','e','l','o','p','e','r' };
-	List.showInf();
-	List + second;
-	List.showInf();
-
-	if (List != second) {
-		cout << "Yes" << endl;
+	void show()
+	{
+		cout << "¥n Класс: Автомобиль";
+		cout << "¥n Имя водителя: " << name;
+		cout << "¥n Водительский стаж:" << experience;
+		cout << "¥n";
 	}
-	else
-		cout << "No" << endl;
-
-	if (List != me) {
-		cout << "Yes" << endl;
+	void input()
+	{
+		cout << "¥n Имя водителя АВТОМОБИЛЯ: ";
+		cin >> name;
+		cout << "¥n Водительский стаж:";
+		cin >> experience;
+		cout << "¥n";
+		cout << "---------------------------------¥n";
 	}
-	else
-		cout << "No" << endl;
-
-	cout << "List[6]: " << List[6] << endl;
-	system("pause");
+};
+class train :public TranspVehicle // производный класс
+{
+public:
+	train() : TranspVehicle() {}
+	train(const char* NAME, int EXPERIENCE, bool AddToList = false) :TranspVehicle(NAME,
+		EXPERIENCE)
+	{
+		if (AddToList)
+		{
+			TranspVehicle* p = beg;
+			while (p->next)
+			{
+				p = p->next;
+			} p
+				->next = this;
+		}
+	}void show()
+	{
+		cout << "¥nКласс: Поезд";
+		cout << "¥n Имя водителя: " << name;
+		cout << "¥n Водительский стаж:" << experience;
+		cout << "¥n";
+	}
+	void input()
+	{
+		cout << "¥n Имя водителя ПОЕЗДА: ";
+		cin >> name;
+		cout << "¥n Водительский стаж:";
+		cin >> experience;
+		cout << "¥n";
+		cout << "---------------------------------¥n";
+	}
+};
+class express :public train // производный класс
+{
+public:
+	express() : train() {}
+	express(const char* NAME, int EXPERIENCE, bool AddToList = false) :train(NAME,
+		EXPERIENCE)
+	{
+		if (AddToList)
+		{
+			TranspVehicle* p = beg;
+			while (p->next)
+			{
+				p = p->next;
+			} p
+				->next = this;
+		}
+	}
+	void show()
+	{
+		cout << "¥n Класс: Экспресс";
+		cout << "¥n Имя водителя: " << name;
+		cout << "¥n Водительский стаж:" << experience;
+		cout << "¥n";
+	}
+	void input()
+	{
+		cout << "¥n Имя водителя ЭКСПРЕСС: ";
+		cin >> name;
+		cout << "¥n Водительский стаж:";
+		cin >> experience;
+		cout << "¥n";
+	}
+};
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	car* x1;
+	train* x2;
+	express* x3; x1 = new car;
+	x2 = new train;
+	x3 = new express;
+	x1->input();
+	x2->input();
+	x3->input();
+	cout << "_______________________________________________¥n";
+	TranspVehicle::beg = x1;
+	x1->next = x2;
+	x2->next = x3;
+	express* x4 = new express("Игорь", 5, true); // Создание объекта класса
+	TranspVehicle::ShowList();
 	return 0;
 }
